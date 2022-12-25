@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-quark2
+spec:
+  runtimeClassName: quark
+  containers:
+  - name: nginx2
+    image: nginx
+    stdin: true 
+    tty: true 
+    resources:
+      requests:
+        cpu: 100m
+        memory: 100Mi
+      limits:
+        memory: "200Mi"

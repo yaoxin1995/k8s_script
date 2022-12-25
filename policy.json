@@ -1,0 +1,129 @@
+
+{
+    "defaultAction": "CRI_ACT_RETUREN_ERRNO",
+    "Role": "Host",   
+    "CriEndpoits": [
+        {
+            "name": "attach",
+            "action": "CRI_ACT_ALLOW",
+            "opts": {
+                "stdin": false,   
+                "tty": false  
+            }
+        },
+
+        {
+            "name": "create", 
+            "action": "CRI_ACT_ALLOW",
+            "opts": {}
+        },
+
+        {
+            "name": "exec",
+            "action": "CRI_ACT_ALLOW",
+            "opts": {
+                "interactive": false,   
+                "sync": true, 
+                "timeout": 5, 
+                "tty": false
+            },
+            "allowed_binary": ["/usr/bin/ls", "/usr/bin/cat", "/usr/bin/touch"]
+        },
+
+        {
+            "name": "inspect",    
+            "action": "CRI_ACT_ALLOW",
+            "opts": {
+                "verbose": false
+            }
+        },
+
+        {
+            "name": "inspectp",
+            "action": "CRI_ACT_ALLOW",
+            "opts": {
+                "verbose": false
+            }
+        },
+
+        {
+            "name": "port-forward",  
+            "action": "CRI_ACT_ALLOW",
+            "opts": {},
+            "allowed_remote_ports": [1200, 1500]
+        },
+
+        {
+            "name": "ps", 
+            "action": "CRI_ACT_ALLOW",
+            "opts": {  
+                    "verbose": false
+            }
+            
+        },
+
+        {
+            "name": "run",  
+            "action": "CRI_ACT_ALLOW",
+            "opts": {}
+        },
+
+        {
+            "name": "runp",    
+            "action": "CRI_ACT_ALLOW",
+            "opts": {}
+        },
+
+        {
+            "name": "rm",    
+            "action": "CRI_ACT_ALLOW",
+            "opts": {}
+        },
+
+
+        {
+            "name": "rmp",   
+            "action": "CRI_ACT_ALLOW",
+            "opts": {}
+        },
+
+        {
+            "name": "pods",    
+            "action": "CRI_ACT_ALLOW",
+            "opts": {
+                "verbose": false  
+            }
+        },
+
+        {
+            "name": "start",    
+            "action": "CRI_ACT_ALLOW",
+            "opts": {}
+        },
+
+        {
+            "name": "stop",    
+            "action": "CRI_ACT_ALLOW",
+            "opts": {}
+        },
+
+        {
+            "name": "stopp",   
+            "action": "CRI_ACT_ALLOW",
+            "opts": {}
+        },
+
+        {
+            "name": "update",  
+            "action": "CRI_ACT_ALLOW",
+            "opts": {}
+        },
+
+        {
+            "name": "stats",
+            "action": "CRI_ACT_ALLOW",     
+            "opts": {}
+        }
+    ]
+}
+

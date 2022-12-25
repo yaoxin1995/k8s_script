@@ -1,0 +1,17 @@
+{
+    "metadata": {
+        "name": "busybox"
+    },
+    "image":{
+        "image": "busybox"
+    },
+    "command": [
+        "top"
+    ],
+    "log_path":"busybox.0.log",
+    "stdin": false,
+	"stdin_once": false,
+	"tty": false,
+    "linux": {
+    }
+  }
