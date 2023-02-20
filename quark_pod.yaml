@@ -4,14 +4,31 @@ metadata:
   name: nginx-quark2
 spec:
   runtimeClassName: quark
+  volumes:
+    - name: my-mongo-persistent-storage
+      persistentVolumeClaim:
+        claimName: my-mongo-pvc
+    - name: my-mongo-config
+      configMap:
+        name: my-mongo-config
+    - name: my-mongo-ssl-certs
+      secret:
+        secretName: my-mongo-ssl-certs
   containers:
-  - name: nginx2
+  - name: nginx3
     image: nginx
-    stdin: true 
-    tty: true 
+    # stdin: false
+    # tty: false 
     resources:
       requests:
         cpu: 100m
         memory: 100Mi
       limits:
         memory: "200Mi"
+    volumeMounts:
+      - name: my-mongo-persistent-storage
+        mountPath: /data/db
+      - name: my-mongo-config
+        mountPath: /etc/mongo
+      - name: my-mongo-ssl-certs
+        mountPath: /etc/ssl

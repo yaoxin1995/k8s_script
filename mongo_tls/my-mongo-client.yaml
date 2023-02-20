@@ -1,0 +1,13 @@
+# my-mongo-client.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-mongo-client
+  namespace: default
+spec:
+  containers:
+  - name: my-mongo-client
+    image: mongo:3.6
+    command: ["tail", "-f", "/dev/null"]  # et the command totail -f /dev/null to prevent container from exiting
+    imagePullPolicy: IfNotPresent
+  restartPolicy: Always

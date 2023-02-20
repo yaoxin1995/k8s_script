@@ -10,7 +10,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: mongo
       app.kubernetes.io/component: backend
-  replicas: 1
+  replicas: 4
   template:
     metadata:
       labels:
@@ -24,9 +24,9 @@ spec:
         args:
           - --bind_ip
           - 0.0.0.0
-        resources:
-          requests:
-            cpu: 100m
-            memory: 100Mi
+        # resources:
+        #   requests:
+        #     cpu: 100m
+        #     memory: 100Mi
         ports:
         - containerPort: 27017

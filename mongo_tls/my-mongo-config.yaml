@@ -1,0 +1,18 @@
+# my-mongo-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-mongo-config
+  namespace: default
+data:
+  mongod.conf: |
+    security:
+      authorization: enabled
+    net:
+      ssl:
+        mode: allowSSL 
+        PEMKeyFile: /etc/ssl/mongodb.pem
+        CAFile: /etc/ssl/root-ca.pem
+        allowConnectionsWithoutCertificates: true
+
+  
