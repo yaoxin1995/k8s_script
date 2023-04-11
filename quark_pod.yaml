@@ -1,24 +1,34 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: nginx-quark2
+  # name: nginx-quark10
+  name: mongo
 spec:
   runtimeClassName: quark
   volumes:
     - name: my-mongo-persistent-storage
       persistentVolumeClaim:
         claimName: my-mongo-pvc
-    - name: my-mongo-config
-      configMap:
-        name: my-mongo-config
-    - name: my-mongo-ssl-certs
-      secret:
-        secretName: my-mongo-ssl-certs
+    # - name: my-mongo-config
+    #   configMap:
+    #     name: my-mongo-config
+    # - name: my-mongo-ssl-certs
+    #   secret:
+    #     secretName: my-mongo-ssl-certs
   containers:
-  - name: nginx3
-    image: nginx
+  # - name: nginx
+  #   image: nginx
+  - name: my-mongo
+    image: mongo:3.6
+    args:
+    - --config
+    - /secret/mongod.conf
+    # - -vvvvvv
     # stdin: false
     # tty: false 
+    env:
+    - name: DEMO_GREETING
+      value: "Hello from the environment"
     resources:
       requests:
         cpu: 100m
@@ -28,7 +38,9 @@ spec:
     volumeMounts:
       - name: my-mongo-persistent-storage
         mountPath: /data/db
-      - name: my-mongo-config
-        mountPath: /etc/mongo
-      - name: my-mongo-ssl-certs
-        mountPath: /etc/ssl
+      # - name: my-mongo-config
+      #   mountPath: /etc/mongo
+      #   readOnly: true
+      # - name: my-mongo-ssl-certs
+      #   mountPath: /etc/ssl
+      #   readOnly: true
