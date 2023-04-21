@@ -10,3 +10,9 @@ syscalls = {git = "https://github.com/yaoxin1995/syscalls.git"}
 sha2 = { version = "0.10.6", default-features = false,  features = ["force-soft"]}
 hex-literal = "0.3.4"
 base64ct = { version = "1.5.3",  features = ["alloc"]}
+serde = { version = "1.0", default-features = false, features = ["alloc"] }
+serde_json = { version = "1.0", default-features = false, features = ["alloc"] }
+serde_derive = { version = "1.0.106", default-features = false}
+anyhow = "1.0.70"
+ssh-key  = {version = "0.6.0-rc.0", default-features = false, features = ["alloc",  "crypto"]}
+rand = { version = "0.8.3", features = ["getrandom"], default-features = false }
