@@ -46,10 +46,10 @@ docker_space_after
 # sudo docker push yaoxinjing/syscall-test
 
 
-docker build -t  get-att-report-syscall-test .
+docker build -t  syscall-inteceptor-test .
 
-sudo docker tag get-att-report-syscall-test:latest yaoxinjing/get-att-report-syscall-test:latest
-sudo docker push yaoxinjing/get-att-report-syscall-test
+sudo docker tag  syscall-inteceptor-test:latest yaoxinjing/syscall-inteceptor-test:latest
+sudo docker push yaoxinjing/syscall-inteceptor-test
 
 
 
