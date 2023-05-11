@@ -16,3 +16,5 @@ serde_derive = { version = "1.0.106", default-features = false}
 anyhow = "1.0.70"
 ssh-key  = {version = "0.6.0-rc.0", default-features = false, features = ["alloc",  "crypto"]}
 rand = { version = "0.8.3", features = ["getrandom"], default-features = false }
+lazy_static = "1.4.0"
+statrs = "0.16.0"

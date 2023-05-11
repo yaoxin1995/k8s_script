@@ -1,0 +1,150 @@
+#####################################################################
+Finding syscall-test images
+#####################################################################
+Listing images that needs to be cleaned up
+bfe296a52501
+#####################################################################
+Cleaning images
+#####################################################################
+Current Docker Space, after clean up:
+TYPE TOTAL ACTIVE SIZE RECLAIMABLE Images 17 2 4.072GB 3.934GB (96%) Containers 9 0 0B 0B Local Volumes 0 0 0B 0B Build Cache 19 0 167.4MB 167.4MB
+#####################################################################
+Finding syscall-test images
+#####################################################################
+Listing images that needs to be cleaned up
+91a29cbef7e8 00150f445191
+#####################################################################
+Cleaning images
+#####################################################################
+Current Docker Space, after clean up:
+TYPE TOTAL ACTIVE SIZE RECLAIMABLE Images 15 2 2.822GB 1.341GB (47%) Containers 9 0 0B 0B Local Volumes 0 0 0B 0B Build Cache 19 0 167.4MB 167.4MB
+#####################################################################
+Finding syscall-test images
+#####################################################################
+Listing images that needs to be cleaned up
+3aaeab7a4777
+#####################################################################
+Cleaning images
+#####################################################################
+Current Docker Space, after clean up:
+TYPE TOTAL ACTIVE SIZE RECLAIMABLE Images 14 2 2.693GB 1.212GB (44%) Containers 9 0 0B 0B Local Volumes 0 0 0B 0B Build Cache 19 0 167.4MB 167.4MB
+#####################################################################
+Finding syscall-test images
+#####################################################################
+Listing images that needs to be cleaned up
+feb5d9fea6a5
+#####################################################################
+Cleaning images
+#####################################################################
+Current Docker Space, after clean up:
+TYPE TOTAL ACTIVE SIZE RECLAIMABLE Images 14 2 2.693GB 1.212GB (44%) Containers 9 0 0B 0B Local Volumes 0 0 0B 0B Build Cache 19 0 167.4MB 167.4MB
+#####################################################################
+Finding syscall-test images
+#####################################################################
+Listing images that needs to be cleaned up
+feb5d9fea6a5
+#####################################################################
+Cleaning images
+#####################################################################
+Current Docker Space, after clean up:
+TYPE TOTAL ACTIVE SIZE RECLAIMABLE Images 13 1 2.693GB 1.212GB (44%) Containers 9 0 0B 0B Local Volumes 0 0 0B 0B Build Cache 19 0 167.4MB 167.4MB
+#####################################################################
+Finding syscall-test images
+#####################################################################
+Listing images that needs to be cleaned up
+
+#####################################################################
+Cleaning images
+#####################################################################
+Current Docker Space, after clean up:
+TYPE TOTAL ACTIVE SIZE RECLAIMABLE Images 13 1 2.693GB 1.212GB (44%) Containers 9 0 0B 0B Local Volumes 0 0 0B 0B Build Cache 19 0 167.4MB 167.4MB
+#####################################################################
+Finding syscall-test images
+#####################################################################
+Listing images that needs to be cleaned up
+
+#####################################################################
+Cleaning images
+#####################################################################
+Current Docker Space, after clean up:
+TYPE TOTAL ACTIVE SIZE RECLAIMABLE Images 14 1 2.693GB 2.555GB (94%) Containers 9 0 0B 0B Local Volumes 0 0 0B 0B Build Cache 19 0 167.4MB 167.4MB
+#####################################################################
+Finding syscall-test images
+#####################################################################
+Listing images that needs to be cleaned up
+7c2d65440dd8
+#####################################################################
+Cleaning images
+#####################################################################
+Current Docker Space, after clean up:
+TYPE TOTAL ACTIVE SIZE RECLAIMABLE Images 14 1 2.693GB 2.555GB (94%) Containers 9 0 0B 0B Local Volumes 0 0 0B 0B Build Cache 20 0 186.6MB 186.6MB
+#####################################################################
+Finding syscall-test images
+#####################################################################
+Listing images that needs to be cleaned up
+3682cfc54617 3682cfc54617
+#####################################################################
+Cleaning images
+#####################################################################
+Current Docker Space, after clean up:
+TYPE TOTAL ACTIVE SIZE RECLAIMABLE Images 14 1 2.693GB 2.555GB (94%) Containers 9 0 0B 0B Local Volumes 0 0 0B 0B Build Cache 20 0 186.6MB 186.6MB
+#####################################################################
+Finding syscall-test images
+#####################################################################
+Listing images that needs to be cleaned up
+3682cfc54617 3682cfc54617
+#####################################################################
+Cleaning images
+#####################################################################
+Current Docker Space, after clean up:
+TYPE TOTAL ACTIVE SIZE RECLAIMABLE Images 14 1 2.693GB 2.555GB (94%) Containers 9 0 0B 0B Local Volumes 0 0 0B 0B Build Cache 20 0 186.6MB 186.6MB
+#####################################################################
+Finding syscall-test images
+#####################################################################
+Listing images that needs to be cleaned up
+7c2d65440dd8 7c2d65440dd8
+#####################################################################
+Cleaning images
+#####################################################################
+Current Docker Space, after clean up:
+TYPE TOTAL ACTIVE SIZE RECLAIMABLE Images 14 1 2.693GB 2.555GB (94%) Containers 9 0 0B 0B Local Volumes 0 0 0B 0B Build Cache 20 0 186.6MB 186.6MB
+#####################################################################
+Finding syscall-test images
+#####################################################################
+Listing images that needs to be cleaned up
+3682cfc54617 3682cfc54617
+#####################################################################
+Cleaning images
+#####################################################################
+Current Docker Space, after clean up:
+TYPE TOTAL ACTIVE SIZE RECLAIMABLE Images 14 1 2.693GB 2.555GB (94%) Containers 9 0 0B 0B Local Volumes 0 0 0B 0B Build Cache 20 0 186.6MB 186.6MB
+#####################################################################
+Finding syscall-test images
+#####################################################################
+Listing images that needs to be cleaned up
+3682cfc54617 3682cfc54617
+#####################################################################
+Cleaning images
+#####################################################################
+Current Docker Space, after clean up:
+TYPE TOTAL ACTIVE SIZE RECLAIMABLE Images 14 1 2.693GB 2.555GB (94%) Containers 9 0 0B 0B Local Volumes 0 0 0B 0B Build Cache 20 0 186.6MB 186.6MB
+#####################################################################
+Finding syscall-test images
+#####################################################################
+Listing images that needs to be cleaned up
+3682cfc54617 3682cfc54617
+#####################################################################
+Cleaning images
+#####################################################################
+Current Docker Space, after clean up:
+TYPE TOTAL ACTIVE SIZE RECLAIMABLE Images 14 1 2.693GB 2.555GB (94%) Containers 9 0 0B 0B Local Volumes 0 0 0B 0B Build Cache 20 0 186.6MB 186.6MB
+#####################################################################
+Finding syscall-test images
+#####################################################################
+Listing images that needs to be cleaned up
+febe8fe308fb febe8fe308fb
+#####################################################################
+Cleaning images
+#####################################################################
+Current Docker Space, after clean up:
+TYPE TOTAL ACTIVE SIZE RECLAIMABLE Images 16 1 2.888GB 2.75GB (95%) Containers 9 0 0B 0B Local Volumes 0 0 0B 0B Build Cache 21 0 205.8MB 205.8MB

@@ -40,10 +40,16 @@ docker_space_after
 
 
 
-docker build -t  syscall-test .
+# docker build -t  syscall-test .
 
-sudo docker tag syscall-test:latest yaoxinjing/syscall-test:latest
-sudo docker push yaoxinjing/syscall-test
+# sudo docker tag syscall-test:latest yaoxinjing/syscall-test:latest
+# sudo docker push yaoxinjing/syscall-test
+
+
+docker build -t  get-att-report-syscall-test .
+
+sudo docker tag get-att-report-syscall-test:latest yaoxinjing/get-att-report-syscall-test:latest
+sudo docker push yaoxinjing/get-att-report-syscall-test
 
 
 

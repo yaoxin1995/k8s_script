@@ -2,6 +2,10 @@ use syscalls::*;
 use serde::*;
 use anyhow::{Result, Ok};
 use ssh_key;
+use std::time::Instant;
+use std::sync::Mutex;
+use std::env;
+
 
 
 const SAMPLE_DATA: &str = "
@@ -11,6 +15,15 @@ const SAMPLE_DATA: &str = "
 /// - Sevsnp: SEV-SNP TEE.
 /// - Sample: A dummy TEE that used to test/demo the KBC functionalities.
 ";
+
+#[macro_use]
+extern crate lazy_static;
+
+lazy_static! {
+    pub static ref GLOBAL_STATISTICS_KEEPER: Mutex<SystemCallStatistic> = Mutex::new(SystemCallStatistic::default());
+}
+
+
 #[repr(C)]
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub struct SnpAttestationReportSignature {
@@ -127,9 +140,19 @@ pub struct SoftwareBasedAttestationReport {
 }
 
 
-fn test_get_hardware_report() -> Result<()> {
 
-    println!("test_get_hardware_report start");
+#[derive(Debug, Default)]
+pub struct SystemCallStatistic {
+    pub test_get_hardware_report_in_ns: Vec<f64>,
+    pub test_get_software_report_signed_by_kbs_in_ns: Vec<f64>,
+    pub test_get_software_report_signed_by_user_provided_key_in_ns: Vec<f64>
+}
+
+
+
+fn test_get_hardware_report(loop_times: i32) -> Result<()> {
+
+    println!("test_get_hardware_report start, loop time is {}", loop_times);
 
     // Test hardware report
     let mut hardware_report = Report::default();
@@ -139,29 +162,46 @@ fn test_get_hardware_report() -> Result<()> {
     };
     let user_data = SAMPLE_DATA.as_bytes().to_vec();
 
+    let mut i = 0;
+    let mut statistic_keeper = GLOBAL_STATISTICS_KEEPER.lock().unwrap();
+
     // println!("test_get_hardware_report, user_data_addr {:?}, user_data_len {:?}, hardware_report_req {:?}", user_data.as_ptr() as *const _, user_data.len() as u64,  hardware_report_req);
+    loop {
 
+        let start = Instant::now();
+        let res = unsafe { syscall !(Sysno::syscall_num_get_report, user_data.as_ptr() as *const _, user_data.len() as u64, & hardware_report_req as *const _,  &mut hardware_report as *mut _) };
+        if res.is_err() {
+            println!("test_get_hardware_report got error {:?} loop time {:?}", res, i);
+            return Err(anyhow::Error::msg(format!("test_get_hardware_report got error {:?}, loop time {:?}", res, i)));
+        }
+        let end = Instant::now();
+        let period = (end - start).as_nanos() as f64;
 
-    let res = unsafe { syscall !(Sysno::syscall_num_get_report, user_data.as_ptr() as *const _, user_data.len() as u64, & hardware_report_req as *const _,  &mut hardware_report as *mut _) };
-    if res.is_err() {
-        println!("test_get_hardware_report got error {:?}", res);
-        return Err(anyhow::Error::msg(format!("test_get_hardware_report got error {:?}", res)));
+        statistic_keeper.test_get_hardware_report_in_ns.push(period);
+
+        let raw_report = &hardware_report.report[..hardware_report.report_length as usize];
+    
+        let _: AttestationReport = serde_json::from_slice(raw_report)
+            .map_err(|e| anyhow::Error::msg(format!("test_get_hardware_report, serde_json::from_slice(raw_report) failed {:?}, looped time {:?}", e, i)))?;
+        // println!("test_get_hardware_report report {:?}", report);
+
+        i = i + 1;
+        if i > loop_times {
+            break;
+        }
+        
     }
 
-    let raw_report = &hardware_report.report[..hardware_report.report_length as usize];
-    let report: AttestationReport = serde_json::from_slice(raw_report)
-        .map_err(|e| anyhow::Error::msg(format!("test_get_hardware_report, serde_json::from_slice(raw_report) failed {:?}", e)))?;
 
 
-    println!("test_get_hardware_report report {:?}", report);
     Ok(())
 
 }
 
 
-fn test_get_software_report_signed_by_kbs() -> Result<()> {
+fn test_get_software_report_signed_by_kbs(loop_times: i32) -> Result<()> {
 
-    println!("test_get_software_report_signed_by_kbs start");
+    println!("test_get_software_report_signed_by_kbs start loop time is {}", loop_times);
 
     let mut soft_report = Report::default();
     let software_report_req = Requst {
@@ -170,21 +210,37 @@ fn test_get_software_report_signed_by_kbs() -> Result<()> {
     };
     let user_data = SAMPLE_DATA.as_bytes().to_vec();
 
-    // println!("test_get_software_report_signed_by_kbs, user_data_addr {:?}, user_data_len {:?}, software_report_req {:?}", user_data.as_ptr() as *const _, user_data.len() as u64,  software_report_req);
+
+    let mut i = 0;
+    let mut statistic_keeper = GLOBAL_STATISTICS_KEEPER.lock().unwrap();
+    loop {
+
+        let start = Instant::now();
+
+        let res = unsafe { syscall !(Sysno::syscall_num_get_report, user_data.as_ptr() as *const _, user_data.len() as u64, & software_report_req as *const _,  &mut soft_report as *mut _) };
+        if res.is_err() {
+            println!("test_get_software_report_signed_by_kbs got error {:?}, loop time {:?}", res, i);
+            return Err(anyhow::Error::msg(format!("test_get_software_report_signed_by_kbs got error {:?}, looped time {:?}", res, i)));
+        }
+        let end = Instant::now();
+        let period = (end - start).as_nanos() as f64;
+
+        statistic_keeper.test_get_software_report_signed_by_kbs_in_ns.push(period);
 
 
-    let res = unsafe { syscall !(Sysno::syscall_num_get_report, user_data.as_ptr() as *const _, user_data.len() as u64, & software_report_req as *const _,  &mut soft_report as *mut _) };
-    if res.is_err() {
-        println!("test_get_software_report_signed_by_kbs got error {:?}", res);
-        return Err(anyhow::Error::msg(format!("test_get_software_report_signed_by_kbs got error {:?}", res)));
+        let raw_report = &soft_report.report[..soft_report.report_length as usize];
+        let _: SoftwareBasedAttestationReport = serde_json::from_slice(raw_report)
+            .map_err(|e| anyhow::Error::msg(format!("test_get_software_report_signed_by_kbs, serde_json::from_slice(raw_report) failed {:?}, looped time {:?}", e, i)))?;
+    
+    
+        // println!("test_get_software_report_signed_by_kbs report {:?}", report);
+        i = i + 1;
+        if i > loop_times {
+            break;
+        }
     }
 
-    let raw_report = &soft_report.report[..soft_report.report_length as usize];
-    let report: SoftwareBasedAttestationReport = serde_json::from_slice(raw_report)
-        .map_err(|e| anyhow::Error::msg(format!("test_get_software_report_signed_by_kbs, serde_json::from_slice(raw_report) failed {:?}", e)))?;
 
-
-    println!("test_get_software_report_signed_by_kbs report {:?}", report);
     Ok(())
 
 }
@@ -210,9 +266,9 @@ fn prepare_signing_key() -> Result<Vec<u8>> {
 }
 
 
-fn test_get_software_report_signed_by_user_provided_key() -> Result<()> {
+fn test_get_software_report_signed_by_user_provided_key(loop_times: i32) -> Result<()> {
 
-    println!("test_get_software_report_signed_by_user_provided_key start");
+    println!("test_get_software_report_signed_by_user_provided_key start, loop time is {}", loop_times);
 
     let signing_key = prepare_signing_key()
         .map_err(|e| anyhow::Error::msg(format!("test_get_software_report_signed_by_user_provided_key, prepare_signing_key() failed {:?}", e)))?;
@@ -228,30 +284,44 @@ fn test_get_software_report_signed_by_user_provided_key() -> Result<()> {
 
     let user_data = SAMPLE_DATA.as_bytes().to_vec();
 
-    // println!("test_get_software_report_signed_by_user_provided_key, user_data_addr {:?}, user_data_len {:?}, software_report_req {:?}", user_data.as_ptr() as *const _, user_data.len() as u64,  software_report_req);
+    let mut i = 0;
+    let mut statistic_keeper = GLOBAL_STATISTICS_KEEPER.lock().unwrap();
+    loop {
+
+        let start = Instant::now();
+
+        let res = unsafe { syscall !(Sysno::syscall_num_get_report, user_data.as_ptr() as *const _, user_data.len() as u64, & software_report_req as *const _,  &mut soft_report as *mut _) };
+        if res.is_err() {
+            println!("test_get_software_report_signed_by_user_provided_key got error {:?}, looped time {:?}", res, i);
+            return Err(anyhow::Error::msg(format!("test_get_software_report_signed_by_user_provided_key got error {:?}", res)));
+        }
+        let end = Instant::now();
+        let period = (end - start).as_nanos() as f64;
+
+        statistic_keeper.test_get_software_report_signed_by_user_provided_key_in_ns.push(period);
 
 
-    let res = unsafe { syscall !(Sysno::syscall_num_get_report, user_data.as_ptr() as *const _, user_data.len() as u64, & software_report_req as *const _,  &mut soft_report as *mut _) };
-    if res.is_err() {
-        println!("test_get_software_report_signed_by_user_provided_key got error {:?}", res);
-        return Err(anyhow::Error::msg(format!("test_get_software_report_signed_by_user_provided_key got error {:?}", res)));
+        let raw_report = &soft_report.report[..soft_report.report_length as usize];
+        let _: SoftwareBasedAttestationReport = serde_json::from_slice(raw_report)
+            .map_err(|e| anyhow::Error::msg(format!("test_get_software_report_signed_by_user_provided_key, serde_json::from_slice(raw_report) failed {:?} looped time {:?}", e, i)))?;
+    
+    
+        // println!("test_get_software_report_signed_by_kbs report {:?}", report);
+        i = i + 1;
+        if i > loop_times {
+            break;
+        }
     }
 
-    let raw_report = &soft_report.report[..soft_report.report_length as usize];
-    let report: SoftwareBasedAttestationReport = serde_json::from_slice(raw_report)
-        .map_err(|e| anyhow::Error::msg(format!("test_get_software_report_signed_by_user_provided_key, serde_json::from_slice(raw_report) failed {:?}", e)))?;
-
-
-    println!("test_get_software_report_signed_by_user_provided_key report {:?}", report);
     Ok(())
 
 }
 
 
 
-fn get_report() -> Result<()>{
+fn get_report(loop_time: i32) -> Result<()>{
 
-    let res = test_get_hardware_report();
+    let res = test_get_hardware_report(loop_time);
     if res.is_err() {
         println!("get_report got error {:?}", res);
         return Err(anyhow::Error::msg(format!("get_report got error {:?}", res)));
@@ -259,19 +329,82 @@ fn get_report() -> Result<()>{
 
 
 
-    let res = test_get_software_report_signed_by_kbs();
+    let res = test_get_software_report_signed_by_kbs(loop_time);
     if res.is_err() {
         println!("get_report got error {:?}", res);
         return Err(anyhow::Error::msg(format!("get_report got error {:?}", res)));
     }
 
 
-    let res = test_get_software_report_signed_by_user_provided_key();
+    let res = test_get_software_report_signed_by_user_provided_key(loop_time);
     if res.is_err() {
         println!("get_report got error {:?}", res);
         return Err(anyhow::Error::msg(format!("get_report got error {:?}", res)));
     }
 
+
+
+    calcaulate_statistic_result().unwrap();
+
+
+
+    Ok(())
+}
+
+
+
+use statrs::distribution::Uniform;
+use statrs::statistics::Median;
+use statrs::statistics::Statistics;
+
+#[derive(Debug, Default)]
+struct OurStatistic {
+    mean: f64,
+    min: f64,
+    max: f64,
+    std_deviation: f64,
+    median : f64
+}
+
+
+
+fn get_statistic(data: &[f64]) -> anyhow::Result<OurStatistic> {
+
+
+    let n = Uniform::new(data.min(), data.max()).unwrap();
+
+    let s = OurStatistic {
+        std_deviation: data.std_dev(),
+        mean: data.mean(),
+        min: data.min(),
+        max: data.max(),
+        median: n.median(), 
+    };
+
+    Ok(s)
+}
+
+
+fn calcaulate_statistic_result() -> anyhow::Result<()> {
+
+    let statistic_keeper = GLOBAL_STATISTICS_KEEPER.lock().unwrap();
+
+
+
+    let test_get_hardware_report_in_ns = get_statistic(&statistic_keeper.test_get_hardware_report_in_ns).unwrap();
+
+    let test_get_software_report_signed_by_kbs_in_ns = get_statistic(&statistic_keeper.test_get_software_report_signed_by_kbs_in_ns).unwrap();
+
+    let test_get_software_report_signed_by_user_provided_key_in_ns = get_statistic(&statistic_keeper.test_get_software_report_signed_by_user_provided_key_in_ns).unwrap();
+
+
+
+    println!("test_get_hardware_report_in_ns {:?}", test_get_hardware_report_in_ns);
+
+    println!("test_get_software_report_signed_by_kbs_in_ns {:?}", test_get_software_report_signed_by_kbs_in_ns);
+
+    println!("test_get_software_report_signed_by_user_provided_key_in_ns {:?}", test_get_software_report_signed_by_user_provided_key_in_ns);
+  
     Ok(())
 }
 
@@ -279,7 +412,14 @@ fn get_report() -> Result<()>{
 fn main() {
     println!("main start");
 
-    let res = get_report();
+
+    let args: Vec<String> = env::args().collect();
+
+    let loop_time = args[1].parse::<i32>().unwrap();
+
+
+
+    let res = get_report(loop_time);
     if res.is_err() {
         println!("main got error {:?}", res);
     }
