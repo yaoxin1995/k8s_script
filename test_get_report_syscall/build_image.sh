@@ -46,10 +46,17 @@ docker_space_after
 # sudo docker push yaoxinjing/syscall-test
 
 
-docker build -t  syscall-inteceptor-test .
+# docker build -t  syscall-inteceptor-test .
 
-sudo docker tag  syscall-inteceptor-test:latest yaoxinjing/syscall-inteceptor-test:latest
-sudo docker push yaoxinjing/syscall-inteceptor-test
+# sudo docker tag  syscall-inteceptor-test:latest yaoxinjing/syscall-inteceptor-test:latest
+# sudo docker push yaoxinjing/syscall-inteceptor-test
+
+
+docker build -t  file-base-secret-test .
+
+sudo docker tag  file-base-secret-test:latest yaoxinjing/file-base-secret-test:latest
+sudo docker push yaoxinjing/file-base-secret-test
+
 
 
 
