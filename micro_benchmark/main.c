@@ -2,17 +2,13 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <time.h>
+#include <stdlib.h>
 
 
-#define gigabyte (unsigned long)(1024*1024*1024L)
 
-#define ten_gigabyte (unsigned long)(10*1024*1024*1024L)
-#define hundrund_gigabyte (unsigned long)(100*1024*1024*1024L)
+#define ARRAY_LEN (unsigned long)(1024*1024*100)
 
-#define thouthend_gigabyte (unsigned long)(1000*1024*1024*1024L)
-
-
-#define ARRAY_LEN (unsigned long)(1024*1024*5)
+// #define TEST_TIME (unsigned long)(50000000)
 
 
 char array[ARRAY_LEN] = {[ 0 ... (1) ] = 'a'} ;
@@ -28,10 +24,15 @@ unsigned long long to_ns(struct timespec time) {
 }
 
 
+
+int get_random() {
+    srand(time(NULL));                      // this line is necessary
+    int random_number = rand() % ARRAY_LEN;
+
+    return random_number;
+}
+
 int main() {
-
-
-
    struct timespec start, end;
    clockid_t clk_id = CLOCK_MONOTONIC;  // CLOCK_REALTIME CLOCK_BOOTTIME CLOCK_PROCESS_CPUTIME_ID
 
@@ -39,9 +40,18 @@ int main() {
 
    printf("Hello, World!\n");
 
+   int index = 0;
    int result = clock_gettime(clk_id, &start);
    for(int i = 0; i < ARRAY_LEN; i++) {
-      char a = array[i];
+      int index = get_random();
+      // char a = array[index];
+      // printf("%i !\n", index);
+      array[index] = 'b';
+
+      // if (index > ARRAY_LEN)
+      //    index = index % ARRAY_LEN;
+
+      // printf("a %c\n", a);
    }
    result = clock_gettime(clk_id, &end);
 
