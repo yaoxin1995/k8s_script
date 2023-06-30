@@ -12,6 +12,7 @@
 
 
 char array[ARRAY_LEN] = {[ 0 ... (1) ] = 'a'} ;
+int index[ARRAY_LEN];
 
 static unsigned long long  NANOS_PER_SEC = 1000000000;
 
@@ -26,27 +27,36 @@ unsigned long long to_ns(struct timespec time) {
 
 
 int get_random() {
-    srand(time(NULL));                      // this line is necessary
+               // this line is necessary
     int random_number = rand() % ARRAY_LEN;
-
     return random_number;
 }
+
 
 int main() {
    struct timespec start, end;
    clockid_t clk_id = CLOCK_MONOTONIC;  // CLOCK_REALTIME CLOCK_BOOTTIME CLOCK_PROCESS_CPUTIME_ID
 
 
+   struct timespec nanos;
+   clock_gettime(CLOCK_MONOTONIC, &nanos);
+   srand(nanos.tv_nsec); 
 
    printf("Hello, World!\n");
 
-   int index = 0;
+   for(int i = 0; i < ARRAY_LEN; i++) {
+      index[i] = get_random();
+         // printf("%d\n", index[i]);
+
+   }
+
    int result = clock_gettime(clk_id, &start);
    for(int i = 0; i < ARRAY_LEN; i++) {
-      int index = get_random();
-      // char a = array[index];
+      int current_idx = index[i];
+      // char a = array[current_idx];
+      // printf("%d\n", current_idx);
       // printf("%i !\n", index);
-      array[index] = 'b';
+      array[current_idx] = 'b';
 
       // if (index > ARRAY_LEN)
       //    index = index % ARRAY_LEN;
@@ -57,14 +67,11 @@ int main() {
 
    unsigned long long  start_ns = to_ns(start);
    unsigned long long  end_ns = to_ns(end);
-
    unsigned long long  duration = end_ns - start_ns;
 
-
-   printf("duration %ju\n", (uintmax_t)duration);
+   int size = ARRAY_LEN / (1024 * 1024);
+   printf("duration %ju, array size %ju MB\n", (uintmax_t)duration, size);
 
 
    // pause ();
-
-   return 0;
 }
